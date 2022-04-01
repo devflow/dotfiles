@@ -3,6 +3,7 @@ set hidden
 
 set nobackup
 set nowritebackup
+set directory^=$HOME/.vim/swap//
 
 set cmdheight=2
 set updatetime=300
@@ -16,9 +17,16 @@ set langmenu=en_US
 let $LANG = 'en_US'
 
 set smartindent
-set tabstop=2
+" set tabstop=2
 set expandtab
-set shiftwidth=2
+" set shiftwidth=2
+autocmd InsertEnter,InsertLeave * set cul!
+
+" only for tmux
+let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+
+set mouse=a
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
@@ -180,7 +188,7 @@ augroup omnisharp_commands
   " Show type information automatically when the cursor stops moving.
   " Note that the type is echoed to the Vim command line, and will overwrite
   " any other messages in this space including e.g. ALE linting messages.
-  autocmd CursorHold *.cs OmniSharpTypeLookup
+  " autocmd CursorHold *.cs OmniSharpTypeLookup
 
   " The following commands are contextual, based on the cursor position.
   autocmd FileType cs nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
@@ -215,25 +223,62 @@ augroup omnisharp_commands
   autocmd FileType cs nmap <silent> <buffer> <Leader>osst <Plug>(omnisharp_start_server)
   autocmd FileType cs nmap <silent> <buffer> <Leader>ossp <Plug>(omnisharp_stop_server)
 augroup END
+
+" from https://github.com/pechorin/any-jump.vim/issues/88
+function! Preserve(command)
+  " preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " do the business:
+  execute a:command
+  " clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
+endfunction
+
 call plug#begin(expand('~/.vim/plugged'))
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline'
 Plug 'arcticicestudio/nord-vim'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'justinmk/vim-dirvish'
+" Plug 'justinmk/vim-dirvish'
 Plug 'kristijanhusak/vim-dirvish-git'
 Plug 'easymotion/vim-easymotion'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'brglng/vim-im-select'
 Plug 'tpope/vim-surround'
 Plug 'OmniSharp/omnisharp-vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-fugitive'
+Plug 'pechorin/any-jump.vim' "{{{
+  let g:any_jump_disable_default_keybindings = 1
+  let g:any_jump_list_numbers = 1
+
+  nnoremap <leader>j :call Preserve("AnyJump")<CR>
+  xnoremap  <leader>j :call Preserve("AnyJump")<CR>
+"}}}
+Plug 'terryma/vim-expand-region'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'dense-analysis/ale'
 call plug#end()
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+
+set grepprg=rg\ --color=never
+let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+let g:ctrlp_use_caching = 0
+
+let g:ale_linters = { 'cs': ['OmniSharp'] }
+let g:ale_set_balloons=1
 
 syntax on
 set re=0
 
 colorscheme nord
-let g:airline_theme='papercolor'
+" let g:airline_theme='papercolor'
 let g:airline_powerline_fonts=1
 let g:im_select_default='com.apple.keylayout.UnicodeHexInput'
 let g:OmniSharp_server_use_mono=1
