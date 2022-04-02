@@ -10,4 +10,6 @@ currently using VIM 8.2.
 ## Karabiner-Elements
 using 14.4.0.
 
+[Complex modification](https://genesy.github.io/karabiner-complex-rules-generator/)
+
 
