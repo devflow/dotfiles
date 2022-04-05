@@ -22,10 +22,6 @@ set expandtab
 " set shiftwidth=2
 autocmd InsertEnter,InsertLeave * set cul!
 
-" only for tmux
-let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-
 set mouse=a
 
 " Always show the signcolumn, otherwise it would shift the text each time
@@ -246,7 +242,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'kristijanhusak/vim-dirvish-git'
 Plug 'easymotion/vim-easymotion'
 " Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'brglng/vim-im-select'
 Plug 'tpope/vim-surround'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'airblade/vim-gitgutter'
@@ -262,6 +257,12 @@ Plug 'pechorin/any-jump.vim' "{{{
 Plug 'terryma/vim-expand-region'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dense-analysis/ale'
+
+" macOS
+if has("macunix")
+  Plug 'brglng/vim-im-select'
+endif
+
 call plug#end()
 
 let g:ctrlp_map = '<c-p>'
@@ -280,6 +281,12 @@ set re=0
 colorscheme nord
 " let g:airline_theme='papercolor'
 let g:airline_powerline_fonts=1
-let g:im_select_default='com.apple.keylayout.UnicodeHexInput'
-let g:OmniSharp_server_use_mono=1
+
+" macOS
+if has("macunix")
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+  let g:im_select_default='com.apple.keylayout.UnicodeHexInput'
+  let g:OmniSharp_server_use_mono=1
+endif
 
