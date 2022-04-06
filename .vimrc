@@ -10,6 +10,8 @@ set updatetime=300
 
 set shortmess+=c
 
+set spell
+
 set number
 set relativenumber
 
@@ -243,10 +245,10 @@ Plug 'vim-airline/vim-airline'
 Plug 'arcticicestudio/nord-vim'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'justinmk/vim-dirvish'
-Plug 'kristijanhusak/vim-dirvish-git'
+" Plug 'kristijanhusak/vim-dirvish-git'
 Plug 'easymotion/vim-easymotion'
 " Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'brglng/vim-im-select'
+" Plug 'brglng/vim-im-select'
 Plug 'tpope/vim-surround'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'airblade/vim-gitgutter'
@@ -262,24 +264,42 @@ Plug 'pechorin/any-jump.vim' "{{{
 Plug 'terryma/vim-expand-region'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dense-analysis/ale'
+Plug 'jremmen/vim-ripgrep'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'nathanaelkane/vim-indent-guides'
 call plug#end()
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_by_filename=1
 
 set grepprg=rg\ --color=never
+let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
 let g:ctrlp_use_caching = 0
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.meta
 
 let g:ale_linters = { 'cs': ['OmniSharp'] }
 let g:ale_set_balloons=1
+
+let g:rg_highlight=1
+let g:rg_derive_root=1
+
+" let g:indent_guides_enable_on_vim_startup = 1
 
 syntax on
 set re=0
 
 colorscheme nord
+hi clear SpellBad
+hi SpellBad cterm=underline ctermfg=Yellow
 " let g:airline_theme='papercolor'
 let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
 let g:im_select_default='com.apple.keylayout.UnicodeHexInput'
+let g:airline_detect_spell=0
 let g:OmniSharp_server_use_mono=1
+let g:OmniSharp_selector_ui='ctrlp'
 
