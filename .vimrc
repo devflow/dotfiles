@@ -24,10 +24,6 @@ set expandtab
 " set shiftwidth=2
 autocmd InsertEnter,InsertLeave * set cul!
 
-" only for tmux
-let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-
 set mouse=a
 
 " Always show the signcolumn, otherwise it would shift the text each time
@@ -248,7 +244,6 @@ Plug 'vim-airline/vim-airline-themes'
 " Plug 'kristijanhusak/vim-dirvish-git'
 Plug 'easymotion/vim-easymotion'
 " Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-" Plug 'brglng/vim-im-select'
 Plug 'tpope/vim-surround'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'airblade/vim-gitgutter'
@@ -267,6 +262,11 @@ Plug 'dense-analysis/ale'
 Plug 'jremmen/vim-ripgrep'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'nathanaelkane/vim-indent-guides'
+
+" macOS
+if has("macunix")
+"  Plug 'brglng/vim-im-select'
+endif
 call plug#end()
 
 let g:ctrlp_map = '<c-p>'
@@ -298,8 +298,14 @@ hi SpellBad cterm=underline ctermfg=Yellow
 let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
-let g:im_select_default='com.apple.keylayout.UnicodeHexInput'
 let g:airline_detect_spell=0
-let g:OmniSharp_server_use_mono=1
 let g:OmniSharp_selector_ui='ctrlp'
+
+" macOS
+if has("macunix")
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+  let g:im_select_default='com.apple.keylayout.UnicodeHexInput'
+  let g:OmniSharp_server_use_mono=1
+endif
 
